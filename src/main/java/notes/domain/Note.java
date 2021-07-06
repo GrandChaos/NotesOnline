@@ -1,4 +1,4 @@
-package notes;
+package notes.domain;
 
 import javax.persistence.*;
 

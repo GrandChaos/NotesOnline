@@ -1,5 +1,6 @@
-package notes;
+package notes.services;
 
+import notes.domain.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

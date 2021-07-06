@@ -1,4 +1,4 @@
-package notes;
+package notes.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
