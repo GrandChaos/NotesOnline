@@ -1,0 +1,22 @@
+nav {
+    background-color: #fcf5f6;
+    border-radius: 4px;
+}
+
+.btn-primary {
+  background: #fad5da;
+  border: none;
+  border-radius: 4px;
+  box-shadow: none;
+  text-shadow: none;
+  outline: none !important;
+  color: black;
+}
+
+.btn-primary:hover, .btn-primary:active, .dropdown-item:active {
+  background: #a04b6c;
+}
+
+.btn-primary:active {
+  transform: translateY(1px);
+}

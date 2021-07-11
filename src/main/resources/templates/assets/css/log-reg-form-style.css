@@ -6,18 +6,11 @@
   max-width: 320px;
   width: 90%;
   margin: 0 auto;
-  background-color: #ffffff;
+  background-color: #fcf5f6;
   padding: 40px;
   border-radius: 4px;
   color: #505e6c;
   box-shadow: 1px 1px 5px rgba(0,0,0,0.1);
-}
-
-.login-clean .illustration {
-  text-align: center;
-  padding: 0 0 20px;
-  font-size: 100px;
-  color: rgb(244,71,107);
 }
 
 .login-clean form .form-control {
@@ -88,4 +81,3 @@
    font-size: 13px;
    line-height: 20px;
  }
-

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Notes Online</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="https://i.imgur.com/eCO8CJ4.png">
+                Notes Online
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <form class="d-flex">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-primary d-block w-100" type="submit">Search</button>
+            </form>
+
+            <div>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Username
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="#">Settings</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#">Log out</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="row">
+            <div class="col-3">
+                <nav class="navbar navbar-light flex-column align-items-stretch p-3">
+                    <div class="btn-group">
+                        <a type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createGroup">
+                            Create group
+                        </a>
+                        <a type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createNote">
+                            Create note
+                        </a>
+                    </div>
+                    <p></p>
+                    <p></p>
+                    <div class="btn-group dropend">
+                        <a type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            Group 1
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Note 1</a></li>
+                            <li><a class="dropdown-item" href="#">Note 2</a></li>
+                            <li><a class="dropdown-item" href="#">Note 3</a></li>
+                        </ul>
+                    </div>
+                    <p></p>
+
+                    <div class="btn-group dropend">
+                        <a type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            Group 2
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Note 1</a></li>
+                            <li><a class="dropdown-item" href="#">Note 2</a></li>
+                            <li><a class="dropdown-item" href="#">Note 3</a></li>
+                        </ul>
+                    </div>
+                    <p></p>
+
+                </nav>
+            </div>
+            <div class="col-8">
+                <p></p>
+                <div>
+                    <form method="post">
+                        <div class="mb-2">
+                            <label class="col-form-label">Name group:</label>
+                            <input type="text" class="form-control" placeholder="Group name" disabled>
+                        </div>
+                        <div class="mb-2">
+                            <label class="col-form-label">Name note:   </label>
+                            <input type="text" class="form-control" placeholder="Note name" disabled>
+                        </div>
+                        <p></p>
+                        <div class="mb-3">
+                            <textarea class="form-control" placeholder="The text of the note" rows="16"></textarea>
+                        </div>
+                        <div>
+                            <p class="text-start">Last change:</p>
+                            <p class="text-start"></p>
+                        </div>
+                    </form>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <div class="d-flex btn-group">
+                            <a type="button" class="btn btn-primary" disabled>Save changes</a>
+                            <a type="button" class="btn btn-secondary">Delete</a>
+                        </div>
+                    </div>
+                </div
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="createGroup" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">New group</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label class="col-form-label">Name group:</label>
+                            <input type="text" class="form-control">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <a type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</a>
+                    <a type="button" class="btn btn-primary">Create group</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="createNote" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel1">New note</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label class="col-form-label">Name group:</label>
+
+                            <input class="form-control" list="datalistOptions" id="exampleDataList" placeholder="Type to search...">
+                            <datalist id="datalistOptions">
+                                <option value="Group 1">
+                                <option value="Group 2">
+                            </datalist>
+                        </div>
+                        <div class="mb-3">
+                            <label class="col-form-label">Name note:</label>
+                            <input type="text" class="form-control">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <a type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</a>
+                    <a type="button" class="btn btn-primary">Create note</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+</body>
+</html>
