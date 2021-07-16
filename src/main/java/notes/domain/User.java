@@ -3,38 +3,33 @@ package notes.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
+@Table(name = "user_t")
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
-    private String username;
+    private String name;
     private String password;
-    private String email;
     @JsonIgnore
-    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
-    private Collection<Group> groups;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    private Set<Group> groups = new HashSet<>();
 
-    public User() {};
 
-    public User(String username, String password, String email){
-        this.username = username;
+    public User() { }
+
+    public User(String name, String password) {
+        this.name = name;
         this.password = password;
-        this.email = email;
     }
 
-    public long getId() {
-        return id;
+    public void setName(String name) {
+        this.name = name;
     }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-    public String getUsername() {
-        return username;
+    public String getName() {
+        return name;
     }
 
     public void setPassword(String password) {
@@ -44,17 +39,10 @@ public class User {
         return password;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    public String getEmail() {
-        return email;
-    }
-
-    public void setGroups(Collection<Group> groups) {
+    public void setGroups(Set<Group> groups) {
         this.groups = groups;
     }
-    public Collection<Group> getGroups() {
+    public Set<Group> getGroups() {
         return groups;
     }
 }

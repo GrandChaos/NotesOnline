@@ -3,29 +3,31 @@ package notes.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
+@Table(name = "group_t")
 public class Group {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    private Long id;
     private String name;
-    @ManyToOne(fetch = FetchType.EAGER)
-    private User user;
     @JsonIgnore
-    @OneToMany(mappedBy = "group", fetch = FetchType.EAGER)
-    private Collection<Note> notes;
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    private Set<Note> notes = new HashSet<>();
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user", nullable = false)
+    private User user;
 
-    public Group() {};
+    public Group() { }
 
-    public Group(String name, User user){
+    public Group(String name) {
         this.name = name;
-        this.user = user;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -36,14 +38,17 @@ public class Group {
         return name;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setNotes(Collection<Note> notes) {
+    public void setNotes(Set<Note> notes) {
         this.notes = notes;
     }
-    public Collection<Note> getNotes() {
+    public Set<Note> getNotes() {
         return notes;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+    public User getUser() {
+        return user;
     }
 }

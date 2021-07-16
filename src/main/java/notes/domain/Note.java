@@ -4,25 +4,28 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@Table(name = "note_t")
 public class Note {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    private Long id;
     private String name;
     private String body;
-    private Date lastChange;
+    private Date date;
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "group_t", nullable = false)
     private Group group;
 
-    public Note() {};
+    public Note() { }
 
-    public Note(String name, Group group){
+    public Note(String name, Date date, String body) {
         this.name = name;
-        this.group = group;
+        this.date = date;
+        this.body = body;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -33,18 +36,18 @@ public class Note {
         return name;
     }
 
+    public void setDate(Date date) {
+        this.date = date;
+    }
+    public Date getDate() {
+        return date;
+    }
+
     public void setBody(String body) {
         this.body = body;
     }
     public String getBody() {
         return body;
-    }
-
-    public void setLastChange(Date lastChange) {
-        this.lastChange = lastChange;
-    }
-    public Date getLastChange() {
-        return lastChange;
     }
 
     public void setGroup(Group group) {
