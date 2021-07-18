@@ -3,8 +3,8 @@ package notes.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 @Entity
 @Table(name = "user_t")
@@ -15,7 +15,7 @@ public class User {
     private String password;
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-    private Set<Group> groups = new HashSet<>();
+    private Set<Group> groups = new TreeSet<>();
 
 
     public User() { }
@@ -39,10 +39,18 @@ public class User {
         return password;
     }
 
-    public void setGroups(Set<Group> groups) {
+    public void setGroups(TreeSet<Group> groups) {
         this.groups = groups;
     }
-    public Set<Group> getGroups() {
+    public TreeSet<Group> getGroups() {
+        TreeSet<Group> groups = new TreeSet<>();
+        for (Group group : this.groups){
+            groups.add(group);
+        }
         return groups;
+    }
+
+    public void addGroup(Group group){
+        groups.add(group);
     }
 }

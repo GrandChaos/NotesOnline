@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface NoteRepository extends CrudRepository<Note, Long> {
-
     Note getOne(long id);
+
+    @Override
+    void deleteById(Long aLong);
 }

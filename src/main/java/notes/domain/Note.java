@@ -5,7 +5,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "note_t")
-public class Note {
+public class Note implements Comparable<Note> {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -19,10 +19,10 @@ public class Note {
 
     public Note() { }
 
-    public Note(String name, Date date, String body) {
+    public Note(String name, Date date, Group group) {
         this.name = name;
         this.date = date;
-        this.body = body;
+        this.group = group;
     }
 
     public Long getId() {
@@ -55,5 +55,10 @@ public class Note {
     }
     public Group getGroup() {
         return group;
+    }
+
+    @Override
+    public int compareTo(Note note) {
+        return name.compareTo(note.getName());
     }
 }

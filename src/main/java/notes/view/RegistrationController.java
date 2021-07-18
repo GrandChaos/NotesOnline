@@ -21,7 +21,7 @@ public class RegistrationController {
 
     @GetMapping("/")
     public String loginRedirect(Model model) {
-        return "redirect:http://localhost:8080/notepad";
+        return "redirect:/NotesOnline";
     }
 
     @GetMapping("/registration")
@@ -56,7 +56,7 @@ public class RegistrationController {
     @GetMapping("/logout")
     public String logout(HttpServletRequest request) throws ServletException {
         request.logout();
-        return "redirect:http://localhost:8080/login";
+        return "redirect:/login";
     }
 }
 
