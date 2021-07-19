@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.Date;
+import java.util.TreeSet;
 
 @Controller
 public class MainController {
@@ -98,7 +99,7 @@ public class MainController {
         note.setName(changedNote.getName());
         note.setBody(changedNote.getBody());
         note.setDate(new Date());
-        System.out.println(note.getGroup().getName() + " " + note.getName() + " " + note.getDate() + " " + note.getBody());
+        //System.out.println(note.getGroup().getName() + " " + note.getName() + " " + note.getDate() + " " + note.getBody());
         noteRepository.save(note);
 
         return "redirect:/NotesOnline/note?id=" + id;
@@ -117,6 +118,60 @@ public class MainController {
         groupRepository.save(group);
 
         return "redirect:/NotesOnline";
+    }
+
+    @GetMapping("/NotesOnline/byGroup")
+    public String searchByGroup (@RequestParam(value = "search") String search, Model model, Principal principal) {
+        User user = userRepository.findByName(principal.getName());
+        model.addAttribute("user", user);
+
+        TreeSet<Note> result = new TreeSet<>();
+        for (Group group : user.getGroups()){
+            if (group.getName().contains(search)){
+                 for (Note note : group.getNotes()){
+                     result.add(note);
+                 }
+            }
+        }
+        model.addAttribute("result", result);
+
+        return "search";
+    }
+
+    @GetMapping("/NotesOnline/byName")
+    public String searchByName (@RequestParam(value = "search") String search, Model model, Principal principal) {
+        User user = userRepository.findByName(principal.getName());
+        model.addAttribute("user", user);
+
+        TreeSet<Note> result = new TreeSet<>();
+        for (Group group : user.getGroups()){
+            for (Note note : group.getNotes()){
+                if (note.getName().contains(search)){
+                    result.add(note);
+                }
+            }
+        }
+        model.addAttribute("result", result);
+
+        return "search";
+    }
+
+    @GetMapping("/NotesOnline/byBody")
+    public String searchByBody (@RequestParam(value = "search") String search, Model model, Principal principal) {
+        User user = userRepository.findByName(principal.getName());
+        model.addAttribute("user", user);
+
+        TreeSet<Note> result = new TreeSet<>();
+        for (Group group : user.getGroups()){
+            for (Note note : group.getNotes()){
+                if (note.getBody().contains(search)){
+                    result.add(note);
+                }
+            }
+        }
+        model.addAttribute("result", result);
+
+        return "search";
     }
 }
 
