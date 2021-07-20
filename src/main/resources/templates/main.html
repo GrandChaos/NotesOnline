@@ -66,32 +66,45 @@
                         </a>
                     </div>
                     <p></p>
-                    <!--<th:block th:each="group:${user.groups}">
-                        <div class="dropend btn-group">
-                            <a type="button" class="btn btn-primary dropdown-toggle btn-block" data-bs-toggle="dropdown" aria-expanded="false" th:text="${group.name}"></a>
-                            <ul class="dropdown-menu">
-                                <th:block th:each="note: ${group.notes}">
-                                <li><a class="dropdown-item" href="#" th:text="${note.name}"></a></li>
-                                </th:block>
-                            </ul>
-                        </div>
-                        <p></p>
-                    </th:block>-->
                     <div class="accordion accordion-flush" id="accordionFlushExample">
-                        <th:block th:each="group:${user.groups}">
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" th:attr="id='flush-heading'+${group.id}">
-                                    <a class="accordion-button collapsed btn" data-bs-toggle="collapse" th:attr="data-bs-target='#flush-collapse'+${group.id}" aria-expanded="false" th:text="${group.name}">
-                                    </a>
-                                </h2>
-                                <div th:attr="id='flush-collapse'+${group.id}" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-                                    <th:block th:each="note: ${group.notes}">
-                                        <div class="accordion-body">
-                                            <a class="dropdown-item" th:href="@{'/NotesOnline/note?id='+${note.id}}" th:text="${note.name}"></a>
-                                        </div>
-                                    </th:block>
+                        <th:block th:each="group_m:${user.groups}">
+                            <!-- Если показываем заметку и ид группы в меню совпадает с идом группы в отображаемой заметке - раскрываем элемент, меняем фон-->
+                            <th:block th:if="${displayed.note and group_m.id==note.group.id}">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" th:attr="id='flush-heading'+${group_m.id}">
+                                        <a class="accordion-button btn" data-bs-toggle="collapse" th:attr="data-bs-target='#flush-collapse'+${group_m.id}" aria-expanded="true" th:text="${group_m.name}" style="background: #faffc2">
+                                        </a>
+                                    </h2>
+                                    <div th:attr="id='flush-collapse'+${group_m.id}" class="accordion-collapse collapse show" data-bs-parent="#accordionFlushExample">
+                                        <th:block th:each="note_m: ${group_m.notes}">
+                                            <!-- Если ид заметки в меню совпадает с идом отображаемой заметки - меняем фон -->
+                                            <div th:if="${note_m.id==note.id}" class="accordion-body"  style="background: #fad5da">
+                                                <a class="dropdown-item" th:href="@{'/NotesOnline/note?id='+${note_m.id}}" th:text="${note_m.name}"></a>
+                                            </div>
+                                            <!-- Если ид заметки в меню не совпадает с идом отображаемой заметки - всё как обычно -->
+                                            <div th:unless="${note_m.id==note.id}" class="accordion-body">
+                                                <a class="dropdown-item" th:href="@{'/NotesOnline/note?id='+${note_m.id}}" th:text="${note_m.name}"></a>
+                                            </div>
+                                        </th:block>
+                                    </div>
                                 </div>
-                            </div>
+                            </th:block>
+                            <!-- Все остальные случаи - всё как обычно-->
+                            <th:block th:unless="${displayed.note and group_m.id==note.group.id}">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" th:attr="id='flush-heading'+${group_m.id}">
+                                        <a class="accordion-button collapsed btn" data-bs-toggle="collapse" th:attr="data-bs-target='#flush-collapse'+${group_m.id}" aria-expanded="false" th:text="${group_m.name}">
+                                        </a>
+                                    </h2>
+                                    <div th:attr="id='flush-collapse'+${group_m.id}" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                                        <th:block th:each="note_m: ${group_m.notes}">
+                                            <div class="accordion-body">
+                                                <a class="dropdown-item" th:href="@{'/NotesOnline/note?id='+${note_m.id}}" th:text="${note_m.name}"></a>
+                                            </div>
+                                        </th:block>
+                                    </div>
+                                </div>
+                            </th:block>
                         </th:block>
                     </div>
                 </nav>

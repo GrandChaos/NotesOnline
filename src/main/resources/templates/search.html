@@ -51,8 +51,7 @@
                     <label class="col-form-label">Body:</label>
                     <p class="col-form-label" th:text="${item.body}"></p>
                     <hr class="dropdown-divider">
-                    <a class="btn btn-primary" style="display: block" th:href="@{'/NotesOnline/note?id='+${item.id}}">Go to the note</a>
-                    <p></p>
+                    <a class="btn btn-primary" style="display: block; margin-bottom: 10px" th:href="@{'/NotesOnline/note?id='+${item.id}}">Go to the note</a>
                 </div>
             </th:block>
         </div>
