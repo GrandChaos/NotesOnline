@@ -59,6 +59,10 @@ public class Note implements Comparable<Note> {
 
     @Override
     public int compareTo(Note note) {
-        return name.compareTo(note.getName());
+        int comp = name.compareTo(note.getName());
+        if (comp == 0){
+            comp = id.compareTo(note.getId());
+        }
+        return comp;
     }
 }

@@ -129,7 +129,7 @@ public class MainController {
         for (Group group : user.getGroups()){
             if (group.getName().contains(search)){
                  for (Note note : group.getNotes()){
-                     if (note.getBody().length() > 18){
+                     if (note.getBody() != null && note.getBody().length() > 18){
                          note.setBody(note.getBody().substring(0, 15) + "...");
                      }
                      result.add(note);
@@ -150,7 +150,7 @@ public class MainController {
         for (Group group : user.getGroups()){
             for (Note note : group.getNotes()){
                 if (note.getName().contains(search)){
-                    if (note.getBody().length() > 18){
+                    if (note.getBody() != null && note.getBody().length() > 18){
                         note.setBody(note.getBody().substring(0, 15) + "...");
                     }
                     result.add(note);
@@ -171,7 +171,7 @@ public class MainController {
         for (Group group : user.getGroups()){
             for (Note note : group.getNotes()){
                 if (note.getBody().contains(search)){
-                    if (note.getBody().length() > 18){
+                    if (note.getBody() != null && note.getBody().length() > 18){
                         note.setBody(note.getBody().substring(0, 15) + "...");
                     }
                     result.add(note);
