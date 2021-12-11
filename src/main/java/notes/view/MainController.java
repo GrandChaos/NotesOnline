@@ -149,7 +149,7 @@ public class MainController {
         TreeSet<Note> result = new TreeSet<>();
         for (Group group : user.getGroups()){
             for (Note note : group.getNotes()){
-                if (note.getName().contains(search)){
+                if (note.getName() != null && note.getName().contains(search)){
                     if (note.getBody() != null && note.getBody().length() > 23){
                         note.setBody(note.getBody().substring(0, 20) + "...");
                     }
@@ -170,7 +170,7 @@ public class MainController {
         TreeSet<Note> result = new TreeSet<>();
         for (Group group : user.getGroups()){
             for (Note note : group.getNotes()){
-                if (note.getBody().contains(search)){
+                if (note.getBody() != null && note.getBody().contains(search)){
                     if (note.getBody() != null && note.getBody().length() > 23){
                         note.setBody(note.getBody().substring(0, 20) + "...");
                     }
@@ -229,7 +229,7 @@ class NewNote{
     private String group;
     private String name;
 
-    NewNote() {};
+    NewNote() {}
 
     public String getGroup() {
         return group;
