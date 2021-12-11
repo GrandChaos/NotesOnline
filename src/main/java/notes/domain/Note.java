@@ -1,7 +1,9 @@
 package notes.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
-import java.util.Date;
+import java.util.*;
 
 @Entity
 @Table(name = "note_t")
@@ -14,8 +16,11 @@ public class Note implements Comparable<Note> {
     private String body;
     private Date date;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "group_t", nullable = false)
+    @JoinColumn(name = "group1", nullable = false)
     private Group group;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "sharedUsers")
+    private Set<User> sharedUsers = new TreeSet<>();
 
     public Note() { }
 
@@ -55,6 +60,13 @@ public class Note implements Comparable<Note> {
     }
     public Group getGroup() {
         return group;
+    }
+
+    public TreeSet<User> getSharedUsers() {
+        return new TreeSet<>(this.sharedUsers);
+    }
+    public void setSharedUsers(TreeSet<User> sharedUsers) {
+        this.sharedUsers = sharedUsers;
     }
 
     @Override

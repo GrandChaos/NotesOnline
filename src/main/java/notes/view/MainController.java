@@ -83,9 +83,11 @@ public class MainController {
         model.addAttribute("displayed", displayed);
 
         Note note = noteRepository.getOne(Long.parseLong(id));
-        model.addAttribute("note", note);
-
-        return "main";
+        if (note.getGroup().getUser().equals(user) || note.getSharedUsers().contains(user)){ //если пользователь имеет доступ
+            model.addAttribute("note", note);
+            return "main";
+        }
+        return "redirect:/NotesOnline";
     }
 
     @PostMapping("/NotesOnline/note")
@@ -116,6 +118,11 @@ public class MainController {
         group.deleteNote(note);
         //System.out.println(group.getNotes());
         groupRepository.save(group);
+
+        if (group.getNotes() == null){
+            user.deleteGroup(group);
+            userRepository.save(user);
+        }
 
         return "redirect:/NotesOnline";
     }
@@ -189,11 +196,13 @@ class Displayed {
     private boolean nothing;
     private boolean note;
     private boolean addNote;
+    private boolean owner;
 
     Displayed() {
         this.nothing = false;
         this.note = false;
         this.addNote = false;
+        this.owner = false;
     }
 
     public boolean isNothing() {
@@ -203,6 +212,7 @@ class Displayed {
         this.nothing = true;
         this.note = false;
         this.addNote = false;
+        this.owner = false;
     }
 
     public boolean isNote() {
@@ -212,6 +222,7 @@ class Displayed {
         this.nothing = false;
         this.note = true;
         this.addNote = false;
+        this.owner = false;
     }
 
 
@@ -222,7 +233,17 @@ class Displayed {
         this.nothing = false;
         this.note = false;
         this.addNote = true;
+        this.owner = false;
     }
+
+    public boolean isOwner() {
+        return owner;
+    }
+
+    public void setOwner() {
+        this.owner = true;
+    }
+
 }
 
 class NewNote{

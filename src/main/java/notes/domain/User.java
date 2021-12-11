@@ -8,7 +8,7 @@ import java.util.TreeSet;
 
 @Entity
 @Table(name = "user_t")
-public class User {
+public class User implements Comparable<User> {
 
     @Id
     private String name;
@@ -16,7 +16,14 @@ public class User {
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<Group> groups = new TreeSet<>();
-
+    @JoinTable(
+            name = "share_t",
+            joinColumns = @JoinColumn(name = "user"),
+            inverseJoinColumns = @JoinColumn(name = "note")
+    )
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "sharedNotes")
+    private Set<Note> sharedNotes = new TreeSet<>();
 
     public User() { }
 
@@ -43,14 +50,26 @@ public class User {
         this.groups = groups;
     }
     public TreeSet<Group> getGroups() {
-        TreeSet<Group> groups = new TreeSet<>();
-        for (Group group : this.groups){
-            groups.add(group);
-        }
-        return groups;
+        return new TreeSet<>(this.groups);
+    }
+
+    public Set<Note> getSharedNotes() {
+        return new TreeSet<>(this.sharedNotes);
+    }
+    public void setSharedNotes(TreeSet<Note> sharedNotes) {
+        this.sharedNotes = sharedNotes;
     }
 
     public void addGroup(Group group){
         groups.add(group);
+    }
+
+    public void deleteGroup(Group group){
+        groups.remove(group);
+    }
+
+    @Override
+    public int compareTo(User user){
+        return name.compareTo(user.getName());
     }
 }
