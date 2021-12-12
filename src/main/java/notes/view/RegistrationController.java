@@ -60,6 +60,7 @@ public class RegistrationController {
     }
 }
 
+//Вспомогательный класс для приёма формы регистрации
 class RegForm {
     private String name;
     private String password;

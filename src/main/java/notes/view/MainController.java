@@ -160,6 +160,16 @@ public class MainController {
                  }
             }
         }
+
+        for (Note note : user.getSharedNotes()){
+            if (note.getGroup().getName().contains(search)){
+                if (note.getBody() != null && note.getBody().length() > 23){
+                    note.setBody(note.getBody().substring(0, 20) + "...");
+                }
+                result.add(note);
+            }
+        }
+
         model.addAttribute("result", result);
 
         return "search";
@@ -181,6 +191,16 @@ public class MainController {
                 }
             }
         }
+
+        for (Note note : user.getSharedNotes()){
+            if (note.getName() != null && note.getName().contains(search)){
+                if (note.getBody() != null && note.getBody().length() > 23){
+                    note.setBody(note.getBody().substring(0, 20) + "...");
+                }
+                result.add(note);
+            }
+        }
+
         model.addAttribute("result", result);
 
         return "search";
@@ -200,6 +220,15 @@ public class MainController {
                     }
                     result.add(note);
                 }
+            }
+        }
+
+        for (Note note : user.getSharedNotes()){
+            if (note.getBody() != null && note.getBody().contains(search)){
+                if (note.getBody() != null && note.getBody().length() > 23){
+                    note.setBody(note.getBody().substring(0, 20) + "...");
+                }
+                result.add(note);
             }
         }
 
@@ -286,6 +315,7 @@ public class MainController {
     }
 }
 
+//Вспомогательный класс для отображения нужных блоков пользователю
 class Displayed {
     private boolean nothing;
     private boolean note;
@@ -352,6 +382,7 @@ class Displayed {
     }
 }
 
+//Вспопогательный класс для приёма формы создания новой заметки
 class NewNote{
     private String group;
     private String name;

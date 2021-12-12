@@ -238,8 +238,6 @@
                     <p></p>
                     <div th:if="${displayed.note and displayed.owner}" style="width: 90%">
                         <a class="btn btn-primary" style="width: 100%" th:href="@{'/NotesOnline/addUserToNote?id='+${note.id}}">Add user</a>
-                        <p></p>
-                        <p></p>
                     </div>
                     <div th:if="${displayed.note}" style="width: 90%">
                         <th:block th:if="${displayed.owner}">
