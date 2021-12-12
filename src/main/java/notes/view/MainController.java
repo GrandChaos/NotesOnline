@@ -81,18 +81,22 @@ public class MainController {
 
         Displayed displayed = new Displayed();
         displayed.setNote();
-        model.addAttribute("displayed", displayed);
 
         try {
             Note note = noteRepository.getOne(Long.parseLong(id));
             if (note.getGroup().getUser().equals(user) || note.getSharedUsers().contains(user)){ //если пользователь имеет доступ
+                if (note.getGroup().getUser().equals(user)) {
+                    displayed.setOwner();
+                }
                 model.addAttribute("note", note);
+                model.addAttribute("displayed", displayed);
                 return "main";
             }
         }
         catch (EntityNotFoundException e){
             System.out.println(e.fillInStackTrace());
         }
+
         return "redirect:/NotesOnline";
     }
 
@@ -100,7 +104,6 @@ public class MainController {
     public String postNote (@RequestParam(value = "id") String id, Model model, Principal principal, Note changedNote) {
         User user = userRepository.findByName(principal.getName());
         model.addAttribute("user", user);
-
         model.addAttribute("note", changedNote);
 
         Note note = noteRepository.getOne(Long.parseLong(id));
@@ -111,7 +114,6 @@ public class MainController {
         noteRepository.save(note);
 
         return "redirect:/NotesOnline/note?id=" + id;
-
     }
 
     @RequestMapping("/NotesOnline/delete")
@@ -205,6 +207,83 @@ public class MainController {
 
         return "search";
     }
+
+    @GetMapping("/NotesOnline/addUserToNote")
+    public String addUserGet(@RequestParam(value = "id") String id, Model model, Principal principal){
+        User user = userRepository.findByName(principal.getName());
+        model.addAttribute("user", user);
+
+        Displayed displayed = new Displayed();
+        displayed.setAddUser();
+        model.addAttribute("displayed", displayed);
+
+        model.addAttribute("userString", new String());
+
+        try {
+            Note note = noteRepository.getOne(Long.parseLong(id));
+            if (note.getGroup().getUser().equals(user)) {
+                model.addAttribute("note", note);
+                return "main";
+            }
+        }
+        catch (EntityNotFoundException e){
+            System.out.println(e.fillInStackTrace());
+        }
+
+        return "redirect:/NotesOnline";
+    }
+
+    @PostMapping("/NotesOnline/addUserToNote")
+    public String addUserPost(@RequestParam(value = "id") String id, Model model, Principal principal, @RequestParam String userString){
+        User user = userRepository.findByName(principal.getName());
+        model.addAttribute("user", user);
+        model.addAttribute("userString", userString);
+
+        System.out.println("Ультра имя пользователя: " + userString);
+
+        try {
+            User userToAdd = userRepository.findByName(userString);
+            Note note = noteRepository.getOne(Long.parseLong(id));
+
+            userToAdd.addSharedNote(note);
+            note.addSharedUser(userToAdd);
+
+            userRepository.save(userToAdd);
+            noteRepository.save(note);
+
+            System.out.println(userToAdd.getSharedNotes());
+        }
+        catch (NullPointerException | EntityNotFoundException e ){
+            System.out.println(e.fillInStackTrace());
+        }
+
+        return "redirect:/NotesOnline/note?id=" + id;
+    }
+
+    @RequestMapping("/NotesOnline/deleteUserFromNote")
+    public String removeUser(@RequestParam(value = "id") String id,@RequestParam(value = "username") String username, Model model, Principal principal){
+        User user = userRepository.findByName(principal.getName());
+        model.addAttribute("user", user);
+        model.addAttribute("username", username);
+
+        try {
+            Note note = noteRepository.getOne(Long.parseLong(id));
+            User userToRemove = userRepository.findByName(username);
+
+            if (note.getGroup().getUser().equals(user)){
+                note.deleteSharedUser(userToRemove);
+                userToRemove.deleteSharedNote(note);
+
+                noteRepository.save(note);
+                userRepository.save(user);
+            }
+        }
+        catch (EntityNotFoundException | NullPointerException e){
+            System.out.println(e.fillInStackTrace());
+        }
+
+        return "redirect:/NotesOnline/note?id=" + id;
+    }
 }
 
 class Displayed {
@@ -212,12 +291,14 @@ class Displayed {
     private boolean note;
     private boolean addNote;
     private boolean owner;
+    private boolean addUser;
 
     Displayed() {
         this.nothing = false;
         this.note = false;
         this.addNote = false;
         this.owner = false;
+        addUser = false;
     }
 
     public boolean isNothing() {
@@ -254,11 +335,21 @@ class Displayed {
     public boolean isOwner() {
         return owner;
     }
-
     public void setOwner() {
         this.owner = true;
     }
 
+    public boolean isAddUser() {
+        return addUser;
+    }
+
+    public void setAddUser() {
+        this.addUser = true;
+        this.nothing = false;
+        this.note = false;
+        this.addNote = false;
+        this.owner = false;
+    }
 }
 
 class NewNote{

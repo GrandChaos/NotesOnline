@@ -67,6 +67,13 @@ public class Note implements Comparable<Note> {
         this.sharedUsers = sharedUsers;
     }
 
+    public void addSharedUser(User shredUser){
+        sharedUsers.add(shredUser);
+    }
+    public void deleteSharedUser(User sharedUser){
+        sharedUsers.remove(sharedUser);
+    }
+
     @Override
     public int compareTo(Note note) {
         int comp = name.compareTo(note.getName());

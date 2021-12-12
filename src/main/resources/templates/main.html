@@ -52,6 +52,7 @@
     </nav>
     <div class="container">
         <div class="row">
+
             <!-- БОКОВОЕ МЕНЮ С ГРУППАМИ -->
             <div class="col-3">
                 <nav class="navbar navbar-light flex-column align-items-stretch p-3">
@@ -65,6 +66,44 @@
                     </div>
                     <p></p>
                     <div class="accordion accordion-flush" id="accordionFlushExample">
+                        <!--Shared to user-->
+                        <th:block th:if="${displayed.note}">
+                            <div class="accordion-item">
+                                <h1 class="accordion-header" id='flush-heading-share'>
+                                    <a class="accordion-button collapsed btn" data-bs-toggle="collapse" data-bs-target='#flush-collapse-share' aria-expanded="false" style="background: #d0d0d0">
+                                        Shared to you
+                                    </a>
+                                </h1>
+                                <div id='flush-collapse-share' class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                                    <th:block th:each="note_m: ${user.sharedNotes}">
+                                        <!-- Если ид заметки в меню совпадает с идом отображаемой заметки - меняем фон -->
+                                        <div th:if="${note_m.id==note.id}" class="accordion-body"  style="background: #fad5da">
+                                            <a class="dropdown-item" th:href="@{'/NotesOnline/note?id='+${note_m.id}}" th:text="${note_m.name}"></a>
+                                        </div>
+                                        <!-- Если ид заметки в меню не совпадает с идом отображаемой заметки - всё как обычно -->
+                                        <div th:unless="${note_m.id==note.id}" class="accordion-body">
+                                            <a class="dropdown-item" th:href="@{'/NotesOnline/note?id='+${note_m.id}}" th:text="${note_m.name}"></a>
+                                        </div>
+                                    </th:block>
+                                </div>
+                            </div>
+                        </th:block>
+                        <th:block th:unless="${displayed.note}">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id='flush-heading-share1'>
+                                    <a class="accordion-button collapsed btn" data-bs-toggle="collapse" data-bs-target='#flush-collapse-share1' aria-expanded="false" style="background: #d0d0d0">
+                                        Shared to you
+                                    </a>
+                                </h2>
+                                <div id='flush-collapse-share1' class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                                    <th:block th:each="note_m: ${user.sharedNotes}">
+                                        <div class="accordion-body">
+                                            <a class="dropdown-item" th:href="@{'/NotesOnline/note?id='+${note_m.id}}" th:text="${note_m.name}"></a>
+                                        </div>
+                                    </th:block>
+                                </div>
+                            </div>
+                        </th:block>
                         <th:block th:each="group_m:${user.groups}">
                             <!-- Если показываем заметку и ид группы в меню совпадает с идом группы в отображаемой заметке - раскрываем элемент, меняем фон-->
                             <th:block th:if="${displayed.note and group_m.id==note.group.id}">
@@ -107,9 +146,8 @@
                     </div>
                 </nav>
             </div>
-            <div class="col-8">
+            <div class="col-7">
                 <p></p>
-
 
                 <!-- ПУСТОЕ ПОЛЕ -->
                 <div th:if="${displayed.nothing}">
@@ -143,10 +181,13 @@
                     </form>
                 </div>
 
-
                 <!-- ПОКАЗ ФОРМЫ РЕДАКТИРОВАНИЯ ЗАМЕТКИ -->
                 <div th:if="${displayed.note}">
                     <form method="post" th:object="${note}">
+                        <div th:unless="${displayed.owner}" class="mb-2">
+                            <label class="col-form-label">Owner:</label>
+                            <input type="text" class="form-control" placeholder="Username" disabled th:field="${note.group.user.name}">
+                        </div>
                         <div class="mb-2">
                             <label class="col-form-label">Name group:</label>
                             <input type="text" class="form-control" placeholder="Group name" disabled th:field="${note.group.name}">
@@ -165,13 +206,57 @@
                         </div>
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                             <div class="d-flex btn-group">
-                                <a type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">Delete</a>
+                                <th:block th:if="${displayed.owner}">
+                                    <a type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">Delete</a>
+                                </th:block>
                                 <button type="submit" class="btn btn-primary">Save changes</button>
                             </div>
                         </div>
                     </form>
                 </div>
 
+                <!-- ПОКАЗ ФОРМЫ ДОБАВЛЕНИЯ ПОЛЬЗОВАТЕЛЯ -->
+                <div th:if="${displayed.addUser}">
+                    <form method="post" th:object="${userString}">
+                        <div class="mb-3">
+                            <h5 align="center">Share note</h5>
+                            <label class="col-form-label">Username:</label>
+                            <input type="text" class="form-control" placeholder="Username" th:value="${userString}" name="userString">
+                        </div>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <div class="d-flex">
+                                <button type="submit" class="btn btn-primary">Add user</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+            <!-- Пользователи, имеющие доступ -->
+            <div class="col-2 navbar-light flex-column">
+                <nav class="navbar navbar-light flex-column align-items-stretch p-3">
+                    <p></p>
+                    <div th:if="${displayed.note and displayed.owner}" style="width: 90%">
+                        <a class="btn btn-primary" style="width: 100%" th:href="@{'/NotesOnline/addUserToNote?id='+${note.id}}">Add user</a>
+                        <p></p>
+                        <p></p>
+                    </div>
+                    <div th:if="${displayed.note}" style="width: 90%">
+                        <th:block th:if="${displayed.owner}">
+                            <label class="col-form-label">Have access to the note (click to remove):</label>
+                        </th:block>
+                        <th:block th:unless="${displayed.owner}">
+                            <label class="col-form-label">Have access to the note:</label>
+                        </th:block>
+
+                        <th:block th:if="${displayed.owner}" th:each="sharedUser:${note.sharedUsers}">
+                            <a class="btn" style="width: 100%" th:href="@{/NotesOnline/deleteUserFromNote(id=${note.id},username=${sharedUser.name})}" th:text="${sharedUser.name}"></a>
+                        </th:block>
+                        <th:block th:unless="${displayed.owner}" th:each="sharedUser:${note.sharedUsers}">
+                            <a class="btn" style="width: 100%" th:text="${sharedUser.name}"></a>
+                        </th:block>
+                    </div>
+                </nav>
             </div>
         </div>
     </div>
@@ -194,6 +279,7 @@
         </div>
     </div>
 </div>
+
     <script type="text/javascript">
         var input = document.getElementById('search');
 

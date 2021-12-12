@@ -63,9 +63,15 @@ public class User implements Comparable<User> {
     public void addGroup(Group group){
         groups.add(group);
     }
-
     public void deleteGroup(Group group){
         groups.remove(group);
+    }
+
+    public void addSharedNote(Note shredNote){
+        sharedNotes.add(shredNote);
+    }
+    public void deleteSharedNote(Note sharedNote){
+        sharedNotes.remove(sharedNote);
     }
 
     @Override
