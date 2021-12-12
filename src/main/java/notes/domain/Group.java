@@ -3,8 +3,6 @@ package notes.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -45,11 +43,7 @@ public class Group implements Comparable<Group>{
         this.notes = notes;
     }
     public TreeSet<Note> getNotes() {
-        TreeSet<Note> notes = new TreeSet<>();
-        for (Note note : this.notes) {
-            notes.add(note);
-        }
-        return notes;
+        return new TreeSet<>(this.notes);
     }
 
     public void setUser(User user) {

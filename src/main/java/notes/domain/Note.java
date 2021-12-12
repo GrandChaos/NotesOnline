@@ -1,7 +1,5 @@
 package notes.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.util.*;
 
@@ -16,7 +14,7 @@ public class Note implements Comparable<Note> {
     private String body;
     private Date date;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "group1", nullable = false)
+    @JoinColumn(name = "group1")
     private Group group;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "sharedUsers")

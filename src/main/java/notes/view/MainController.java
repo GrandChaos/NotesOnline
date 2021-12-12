@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import java.security.Principal;
 import java.util.Date;
 import java.util.TreeSet;
@@ -82,10 +83,15 @@ public class MainController {
         displayed.setNote();
         model.addAttribute("displayed", displayed);
 
-        Note note = noteRepository.getOne(Long.parseLong(id));
-        if (note.getGroup().getUser().equals(user) || note.getSharedUsers().contains(user)){ //если пользователь имеет доступ
-            model.addAttribute("note", note);
-            return "main";
+        try {
+            Note note = noteRepository.getOne(Long.parseLong(id));
+            if (note.getGroup().getUser().equals(user) || note.getSharedUsers().contains(user)){ //если пользователь имеет доступ
+                model.addAttribute("note", note);
+                return "main";
+            }
+        }
+        catch (EntityNotFoundException e){
+            System.out.println(e.fillInStackTrace());
         }
         return "redirect:/NotesOnline";
     }
@@ -113,15 +119,24 @@ public class MainController {
         User user = userRepository.findByName(principal.getName());
         model.addAttribute("user", user);
 
-        Note note = noteRepository.getOne(Long.parseLong(id));
-        Group group = note.getGroup();
-        group.deleteNote(note);
-        //System.out.println(group.getNotes());
-        groupRepository.save(group);
+        try {
+            Note note = noteRepository.getOne(Long.parseLong(id));
 
-        if (group.getNotes() == null){
-            user.deleteGroup(group);
-            userRepository.save(user);
+            Group group = note.getGroup();
+
+            if (group.getUser().equals(user) || note.getSharedUsers().contains(user)){ //если пользователь имеет доступ
+                group.deleteNote(note);
+                //System.out.println(group.getNotes());
+                groupRepository.save(group);
+            }
+
+            if (group.getNotes().isEmpty()){
+                user.deleteGroup(group);
+                userRepository.save(user);
+            }
+        }
+        catch (EntityNotFoundException e){
+            System.out.println(e.fillInStackTrace());
         }
 
         return "redirect:/NotesOnline";
